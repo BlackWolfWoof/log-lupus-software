@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VRChat Lobby</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Left Panel: User Info -->
+    <div id="user-info" class="hidden">
+      <h2>👤 User Info</h2>
+      <img src="robot.jpg" alt="User Avatar" class="avatar">
+
+      <p><strong>🆔 Name:</strong> <span id="info-name">N/A</span></p>
+      <p><strong>📅 Joined:</strong> <span id="info-joined">N/A</span> (<span id="info-days">0</span>d)</p>
+      <p><strong>🔞 Age Verified:</strong> <span id="info-age">N/A</span></p>
+      <p><strong>🎮 Platform:</strong> <span id="info-platform">N/A</span></p>
+      <p><strong>💬 Status:</strong> <span id="info-status">N/A</span></p>
+      <p><strong>🤝 Friend:</strong> <span id="info-friend">N/A</span></p>
+
+      <!-- 🚩 Flagged Avatars (hidden unless user has them) -->
+      <div id="flagged-avatars-section" class="hidden">
+        <h3>🚩 Flagged Avatars</h3>
+        <div id="flagged-avatars" class="flagged-container"></div>
+      </div>
+
+      <!-- ⚠️ Flagged Groups (hidden unless user has them) -->
+      <div id="flagged-groups-section" class="hidden">
+        <h3>⚠️ Flagged Groups</h3>
+        <div id="flagged-groups"></div>
+      </div>
+
+      <!-- 🖼️ Avatars (hidden unless user has them) -->
+      <div id="avatars-section" class="hidden">
+        <h3>🖼️ Avatars</h3>
+        <div id="avatars" class="avatar-container"></div>
+      </div>
+    </div>
+
+    <!-- Right Panel: User List -->
+    <div id="user-list"></div>
+  </div>
+
+  <!-- Gear Icon Button -->
+  <div id="gear-icon-container">
+    ⚙️
+  </div>
+  <!-- Gear icon in the settings menu -->
+
+
+  <!-- Configuration Popup -->
+  <div id="config-popup" class="hidden">
+    <div class="popup-content">
+      <h3>Configuration Settings</h3>
+      <!-- Content of configuration page will be added here -->
+      <button id="close-popup-btn">Close</button>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>
