@@ -1,7 +1,8 @@
+import './loadEnv.js'
+import dotenv from "dotenv"; dotenv.config()
 import fs from "fs/promises"
 import { authenticator } from "otplib"
 import dotenv from "dotenv"; dotenv.config()
-import { reloadEnv } from "./reloadEnv.js"
 import { logInfo, logError, logWarn, logDebug } from "./logger.js"
 import { vrchatFetch } from "./apiQueue.js"
 

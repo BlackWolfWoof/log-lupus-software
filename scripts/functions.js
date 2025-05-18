@@ -1,4 +1,5 @@
 // A list of functions exported and re-used everyehere
+import './loadEnv.js'
 import { testSession } from './authentication.js'
 import { vrchatFetch } from './apiQueue.js'
 import { logDebug, logInfo, logWarn, logError } from './logger.js'
@@ -8,7 +9,6 @@ import { wss } from "./website.js";
 import { flushCache, hasCache, deleteCache, getCache, setCache } from './cache.js'
 import { readdirSync, statSync } from 'fs'
 import { join } from 'path'
-import dotenv from "dotenv"; dotenv.config()
 
 // Defining some variables used in the entire code
 const CACHE_EXPIRE = parseInt(process.env["CACHE_EXPIRE"] || "5") * 60 * 1000 // Convert minutes to milliseconds

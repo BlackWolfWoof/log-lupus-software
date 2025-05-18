@@ -1,4 +1,5 @@
 // Import dependencies
+import './loadEnv.js'
 import TailFile from "@logdna/tail-file";
 import { createInterface } from "readline";
 import { join } from "path";

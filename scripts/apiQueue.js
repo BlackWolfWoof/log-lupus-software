@@ -1,5 +1,5 @@
+import './loadEnv.js'
 import { logDebug, logInfo, logWarn, logError } from './logger.js';
-import dotenv from "dotenv"; dotenv.config();
 
 const requestQueue = [];
 let isProcessing = false;
