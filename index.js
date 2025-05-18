@@ -1,4 +1,5 @@
 // Main file to initialize the code
+import './scripts/loadEnv.js'
 import { readdir } from 'fs/promises';
 import { fileURLToPath, pathToFileURL } from 'url';
 import path from 'path';
