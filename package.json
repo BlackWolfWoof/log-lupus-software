@@ -1,0 +1,26 @@
+{
+  "name": "vrchat-safety",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "BlackWolf",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@logdna/tail-file": "^4.0.2",
+    "better-sqlite3": "^11.8.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "js-string-cleaner": "^1.2.0",
+    "node-cache": "^5.1.2",
+    "otplib": "^12.0.1",
+    "quick.db": "^9.1.7",
+    "remove-accents": "^0.5.0",
+    "say": "^0.16.0",
+    "sound-play": "^1.1.0",
+    "ws": "^8.18.1"
+  }
+}
