@@ -40,8 +40,8 @@ async function getAuthTOTP(auth, totpCode) {
     credentials: "include",
     body: JSON.stringify({
       code: totpCode
-    }, 10) // Max priority
-  })
+    })
+  }, 10) // Max priority
 
   // if (!response.ok) {
   //   logError(`HTTP error getAuthTOTP()! status: ${response.status}`)
