@@ -1,0 +1,7 @@
+# NodeJS
+node_modules/
+
+# Default
+.env
+json.sqlite
+logs/
