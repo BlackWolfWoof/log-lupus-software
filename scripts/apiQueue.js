@@ -1,5 +1,16 @@
 import './loadEnv.js'
 import { logDebug, logInfo, logWarn, logError } from './logger.js';
+import { initAuthentication } from './authentication.js';
+
+let vrchatToken = process.env["VRCHAT_TOKEN"] || ""
+
+export function getVrchatToken() {
+  return vrchatToken
+}
+
+export function setVrchatToken(token) {
+  vrchatToken = token
+}
 
 const requestQueue = [];
 let isProcessing = false;
@@ -44,7 +55,20 @@ async function processQueue() {
     }
 
     try {
-      const response = await fetch(url, options);
+      // Inject the current cookie dynamically
+      const originalHeaders = options.headers || {};
+      const updatedHeaders = {
+        ...originalHeaders,
+        ...(originalHeaders["Cookie"] ? {} : { "Cookie": getVrchatToken() }),
+        ...(originalHeaders["User-Agent"] ? {} : { "User-Agent": process.env["USERAGENT"] }),
+      };
+
+      const updatedOptions = {
+        ...options,
+        headers: updatedHeaders
+      };
+      const response = await fetch(url, updatedOptions);
+      // console.log(`${url}\n${JSON.stringify(updatedOptions, null, 2)}`)
       lastApiCallTime = Date.now(); // Update last API call timestamp
 
       const responseClone = response.clone(); // Clone response before reading body
@@ -86,3 +110,7 @@ async function processQueue() {
 
   isProcessing = false;
 }
+
+(async () => {
+  await initAuthentication();
+})();
