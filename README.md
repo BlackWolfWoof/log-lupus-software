@@ -1,4 +1,7 @@
 # Log Lupus 🐺
+> ‼️ **EARLY ACCESS**  
+> This software is in no means finished. Bugs will happen! If you find one, please let me know.<br>
+
 ### Table of content:
 1. [Installation](#installation)
 2. [Configuring](#configuration)
