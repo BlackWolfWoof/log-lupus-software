@@ -43,6 +43,7 @@ Run `npm i` to install all necesary NPM packages on your system.
 > Your login data is very sensetive. No data is shared to the developer or any other third party other than VRChat itself for logging in.
 The login is necesary, to get data about the users who join your instance like the avatar and groups they use/are in.<br>
 ### `.env` File
+  Rename `example.env` to `.env`<br>
   You have to configure the following variables:
   - `GROUP_ID`: The group id of the VRChat group that automatic moderation actions like bans should be applied to.
   - `VRCHAT_USERNAME`: Your VRChat username. Email works too alternatively. Especially when it comes to special characters.
