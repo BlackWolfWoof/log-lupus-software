@@ -5,7 +5,3 @@ node_modules/
 .env
 json.sqlite
 logs/
-
-# Custom
-scripts/flaggedAvatars.js
-scripts/flaggedGroups.js
