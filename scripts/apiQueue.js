@@ -8,8 +8,17 @@ export function getVrchatToken() {
   return vrchatToken
 }
 
-export function setVrchatToken(token) {
+export async function setVrchatToken(token) {
   vrchatToken = token
+  try {
+    let data = await fs.readFile(".env", "utf-8")
+    data = data.replace(/VRCHAT_TOKEN=.*/, `VRCHAT_TOKEN=auth=${token}`) // Update token
+    await fs.writeFile(".env", data)
+    logDebug(`[Auth]: Credentials saved successfully.`)
+  } catch (err) {
+    logError(`[Auth]: Error updating credentials`)
+    throw err
+  }
 }
 
 const requestQueue = [];

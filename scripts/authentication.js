@@ -58,23 +58,6 @@ async function getAuthTOTP(auth, totpCode) {
 }
 
 /**
- * Save updated credentials to the `.env` file.
- * @param {string} auth - Auth token.
- */
-async function saveCredentials(auth) {
-  try {
-    let data = await fs.readFile(".env", "utf-8")
-    data = data.replace(/VRCHAT_TOKEN=.*/, `VRCHAT_TOKEN=auth=${auth}`) // Update token
-    vrchatToken = `auth=${auth}`
-    await fs.writeFile(".env", data)
-    logDebug(`[Auth]: Credentials saved successfully.`)
-  } catch (err) {
-    logError(`[Auth]: Error updating credentials`)
-    throw err
-  }
-}
-
-/**
  * Create a new session with username and password.
  * @param {string} username - VRChat username.
  * @param {string} password - VRChat password.
@@ -123,7 +106,7 @@ async function authInvalid() {
       const twoFactorAuth = await getAuthTOTP(auth, totpCode)
 
       logInfo(`[Auth]: Success. Saving credentials...`)
-      await saveCredentials(auth)
+      await setVrchatToken(auth)
 
       dotenv.config() // Reload the updated credentials
       logInfo(`[Auth]: 🔄️ Reloaded env vars`)
