@@ -1,6 +1,7 @@
 import './loadEnv.js'
 import { logDebug, logInfo, logWarn, logError } from './logger.js';
 import { initAuthentication } from './authentication.js';
+import fs from "fs/promises"
 
 let vrchatToken = process.env["VRCHAT_TOKEN"] || ""
 
