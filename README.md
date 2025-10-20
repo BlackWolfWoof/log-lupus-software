@@ -3,10 +3,22 @@
 > This software is in no means finished. Bugs will happen! If you find one, please let me know.<br>
 
 ### Table of content:
-1. [Installation](#installation)
-2. [Configuring](#configuration)
-3. [Troubleshooting](#troubleshooting)
+1. [Features](#pictures)
+2. [Installation](#installation)
+3. [Configuring](#configuration)
+4. [Troubleshooting](#troubleshooting)
 
+## Features
+I needed a software to guide me in moderating my instance, and warn me of problematic users, before something happens.
+- Dashboard (currently view only)
+- Audio alearts via TTS
+- Watch groups
+- Watch avatars
+
+![Main](https://blackwolfwoof.com/s/x5z39Ki4jySbeds/preview)
+### Future
+I want to completely re-work this ugly web-gui, but haven't come around to it yet.<br>
+In addition to that, an easy way to import lists of avatars and groups across people, with settings on what you want to import, for a more flexible configuration.
 
 ## Installation
 > ℹ️ **Disclaimer**  
