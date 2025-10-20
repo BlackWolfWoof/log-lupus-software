@@ -35,6 +35,14 @@ body {
     display: block; /* Make sure it's displayed by default */
 }
 
+#flagged-groups {
+  max-height: 200px;         /* Adjust height as needed */
+  overflow-y: auto;
+  padding-right: 10px;       /* Optional: for better spacing when scrollbar appears */
+  border: 1px solid #ccc;    /* Optional: for visual clarity */
+}
+
+
 /* If you want to toggle visibility using a class, ensure it's not hidden by default */
 .hidden {
     display: none;

@@ -6,7 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import { logDebug, logInfo, logWarn, logError } from "./logger.js";
-import { getAllUsers } from "./gameLogParser.js"; // Import getAllUsers function
+import { getAllUsers } from "../vrchat/gameLogParser.js"; // Import getAllUsers function
 import { exec } from 'child_process';
 import { QuickDB } from 'quick.db';
 const db = new QuickDB();
@@ -21,7 +21,7 @@ const server = createServer(app);
 export const wss = new WebSocketServer({ server });
 
 // Serve static frontend files
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "../../public")));
 
 // Parse JSON request bodies
 app.use(express.json());

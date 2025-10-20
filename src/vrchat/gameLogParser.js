@@ -1,13 +1,14 @@
 // Import dependencies
-import './loadEnv.js'
+import '../utils/loadEnv.js'
 import TailFile from "@logdna/tail-file";
 import { createInterface } from "readline";
 import { join } from "path";
 import { userInfo } from "os";
-import { logDebug, logInfo, logWarn, logError } from "./logger.js";
-import { pushDataToWebSocket } from "./website.js";
-import { sanetizeText, parseLocation, getNewestLogFile, processPlayerJoinedLog, processPlayerLeaveLog, processWorldJoin, checkUserGroups, checkAvatar, getUser, banUser } from "./functions.js";
-import { playSound } from './say.js'
+import { logDebug, logInfo, logWarn, logError } from "../utils/logger.js";
+import { pushDataToWebSocket } from "../utils/website.js";
+import { sanetizeText, parseLocation, getNewestLogFile, processPlayerJoinedLog, processPlayerLeaveLog, processWorldJoin, checkUserGroups, checkAvatar } from "../utils/functions.js";
+import { playSound } from '../utils/say.js'
+import { banGroupMember, getUser } from '../utils/cache.js'
 
 // Define `allUsers` as a global object
 let allUsers = {};
@@ -83,9 +84,12 @@ async function doTail() {
           allUsers[userJoinData.displayName].joinedAt = Date.now();
       }
       // Fetch full user data (this is delayed because if the user leaves too fast after joining it will keep users in the list that have long left)
-      const user = await getUser(userJoinData.userId, false);
+      // const user = await getUser(userJoinData.userId, false);
+      const user = await getUser({
+        path: { userId: userJoinData.userId }
+      }, 5, false)
       if (allUsers[userJoinData.displayName]) {
-        allUsers[userJoinData.displayName].user = user
+        allUsers[userJoinData.displayName].user = user.data
       } else {
         return
       }
@@ -94,10 +98,10 @@ async function doTail() {
           Object.entries(allUsers).filter(([key, value]) => value.user?.id)
       );
 
-      logInfo(`[Log Parser]: ${userJoinData.userId} - ${userJoinData.displayName} joined (${Object.keys(filteredUsers).length})`);
+      logInfo(`[Log Parser]: \x1b[38;5;205m${userJoinData.displayName}\x1b[0m - ${userJoinData.userId} - \x1b[32mjoined\x1b[0m (${Object.keys(filteredUsers).length})`);
 
       // Fetch groups
-      const checkGroups = (await checkUserGroups(user.id)) || [];
+      const checkGroups = (await checkUserGroups(user.data.id)) || [];
       if (!allUsers[userJoinData.displayName]) {
         return
       }
@@ -117,9 +121,9 @@ async function doTail() {
       let isBos = false;
       
       for (const priority of groupPriority) {
-        if (!allUsers[user.displayName]) return; // If entry doesn't exist, bail
+        if (!allUsers[user.data.displayName]) return; // If entry doesn't exist, bail
     
-        const matchingGroups = allUsers[user.displayName]?.flaggedGroups.filter(
+        const matchingGroups = allUsers[user.data.displayName]?.flaggedGroups.filter(
             group => group[priority.key] === priority.value
         );
     
@@ -147,10 +151,14 @@ async function doTail() {
       // **Announce if the user is in a flagged group**
       if (shouldPlaySound) {
         if (isBos) {
-          playSound(`Auto ban for ${user.displayName}, for ${flaggedGroupMessage}`, 'SFX_SIREN_CHIRP');
-          await banUser(process.env["GROUP_ID"], user.id);
+          playSound(`Auto ban for ${user.data.displayName}, for ${flaggedGroupMessage}`, 'SFX_SIREN_CHIRP');
+          // await banUser(process.env["GROUP_ID"], user.id);
+          await banGroupMember({
+            path: { groupId: process.env["GROUP_ID"] },
+            body: { userId: user.data.id }
+          })
         } else {
-          playSound(`${user.displayName}. ${flaggedGroupMessage}`, 'SFX_SIREN_CHIRP');
+          playSound(`${user.data.displayName}. ${flaggedGroupMessage}`, 'SFX_SIREN_CHIRP');
         }
       }
 
@@ -159,7 +167,7 @@ async function doTail() {
 
 
       // Player Leave
-      if (log.includes("[Behaviour] OnPlayerLeft") && !log.includes("] OnPlayerLeftRoom")) {
+      if (log.includes("[Behaviour] OnPlayerLeft") && !log.includes("] OnPlayerLeftRoom") && !log.includes("VRCPlayer[Remote]")) {
         const userLeaveData = processPlayerLeaveLog(log);
 
         delete allUsers[userLeaveData.displayName]; // Remove user entry
@@ -169,7 +177,7 @@ async function doTail() {
             Object.entries(allUsers).filter(([key, value]) => value.user?.id)
           );
 
-          logInfo(`[Log Parser]: ${userLeaveData.userId} - ${userLeaveData.displayName} left (${Object.keys(filteredUsers).length})`);
+          logInfo(`[Log Parser]: \x1b[38;5;205m${userLeaveData.displayName}\x1b[0m - ${userLeaveData.userId} - \x1b[31mleft\x1b[0m (${Object.keys(filteredUsers).length})`);
         }
 
         setAllUsers(allUsers); // Update WebSocket clients
@@ -206,7 +214,7 @@ async function doTail() {
 
             // Check if the avatar is flagged
             const aviCheck = checkAvatar(avatarName);
-            logInfo(`[Log Parser]: ${displayName} switched to ${avatarName}`);
+            logInfo(`[Log Parser]: \x1b[38;5;205m${displayName}\x1b[0m switched to avatar \x1b[36m${avatarName}\x1b[0m`);
 
             if (aviCheck && !userData.flaggedAvatars.includes(aviCheck)) {
               userData.flaggedAvatars.push(aviCheck);
@@ -280,7 +288,11 @@ let interval = setInterval(async () => {
   for (const value of banQueue) {
     if (allUsers[value]?.user?.id) {
       try {
-        await banUser(process.env["GROUP_ID"], allUsers[value].user.id);
+        // await banUser(process.env["GROUP_ID"], allUsers[value].user.id);
+        await banGroupMember({
+          path: { groupId: process.env["GROUP_ID"] },
+          body: { userId: allUsers[value].user.id }
+        })
       } catch (e) {
         console.error(e);
         newQueue.push(value); // Keep in queue if banning fails

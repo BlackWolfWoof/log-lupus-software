@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "better-sqlite3": "^11.8.1",
+    "better-sqlite3": "^11.10.0",
     "quick.db": "^9.1.7"
   }
 }
